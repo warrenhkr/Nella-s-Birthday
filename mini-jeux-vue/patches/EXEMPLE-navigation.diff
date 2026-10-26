@@ -1,0 +1,10 @@
+# EXEMPLE À ADAPTER : je n'ai pas vu le fichier de navigation de votre projet.
+# Ce diff montre seulement la forme de la modification (un lien de plus dans le menu).
+# Remplacez le chemin et le contexte par ceux de votre composant de navigation réel.
+--- a/app/components/AppNav.vue
++++ b/app/components/AppNav.vue
+@@ -10,6 +10,7 @@
+       <NuxtLink to="/jeu">Jeux</NuxtLink>
++      <NuxtLink to="/mini-jeux">Mini-jeux</NuxtLink>
+       <NuxtLink to="/algos">Algorithmes</NuxtLink>
+     </nav>

@@ -1,0 +1,38 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+.netlify
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# QA — captures lourdes gardées en local, les mesures JSON sont versionnées
+docs/qa-visual/captures/
+docs/qa-runtime/*.png
+
+# Dossiers de travail locaux
+.qa-tmp/
+build/
+
+Osnella -*/
+*.zip
+test.xlsx
+__pycache__/

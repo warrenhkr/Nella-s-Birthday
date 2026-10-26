@@ -1,0 +1,12 @@
+[build]
+command = "pnpm run build"
+publish = "dist"
+functions = "netlify/functions"
+
+[[redirects]]
+from = "/api/shared-songs"
+to = "/.netlify/functions/shared-songs"
+status = 200
+
+[build.environment]
+NODE_OPTIONS = "--max-old-space-size=4096"

@@ -1,0 +1,570 @@
+[
+ {
+  "id": "ab_test_significance",
+  "title": "ab_test_significance : un test A/B est-il concluant ? Test z de comparaison de deux proportions.",
+  "render": "text",
+  "file": "public/algos/ab_test_significance.py",
+  "params": [
+   {
+    "name": "visitors_a",
+    "label": "Visiteurs A",
+    "type": "int",
+    "min": 100,
+    "max": 100000,
+    "default": 5000
+   },
+   {
+    "name": "rate_a",
+    "label": "Conversion A (%)",
+    "type": "float",
+    "min": 0.5,
+    "max": 60.0,
+    "default": 10.0
+   },
+   {
+    "name": "visitors_b",
+    "label": "Visiteurs B",
+    "type": "int",
+    "min": 100,
+    "max": 100000,
+    "default": 5000
+   },
+   {
+    "name": "rate_b",
+    "label": "Conversion B (%)",
+    "type": "float",
+    "min": 0.5,
+    "max": 60.0,
+    "default": 11.5
+   },
+   {
+    "name": "alpha",
+    "label": "Seuil alpha (%)",
+    "type": "float",
+    "min": 1.0,
+    "max": 10.0,
+    "default": 5.0
+   }
+  ]
+ },
+ {
+  "id": "break_even_chart",
+  "title": "break_even_chart : seuil de rentabilité (point mort) : combien d'unités faut-il vendre pour ne pas perdre d'argent ?",
+  "render": "image",
+  "file": "public/algos/break_even_chart.py",
+  "params": [
+   {
+    "name": "fixed_costs",
+    "label": "Coûts fixes (€)",
+    "type": "float",
+    "min": 500.0,
+    "max": 50000.0,
+    "default": 12000.0
+   },
+   {
+    "name": "price",
+    "label": "Prix de vente unitaire (€)",
+    "type": "float",
+    "min": 5.0,
+    "max": 500.0,
+    "default": 40.0
+   },
+   {
+    "name": "unit_cost",
+    "label": "Coût variable unitaire (€)",
+    "type": "float",
+    "min": 1.0,
+    "max": 400.0,
+    "default": 22.0
+   },
+   {
+    "name": "max_units",
+    "label": "Unités affichées au minimum",
+    "type": "int",
+    "min": 10,
+    "max": 5000,
+    "default": 1000
+   }
+  ]
+ },
+ {
+  "id": "cohort_retention_heatmap",
+  "title": "cohort_retention_heatmap : rétention des clients par cohorte (carte de chaleur).",
+  "render": "grid",
+  "file": "public/algos/cohort_retention_heatmap.py",
+  "params": [
+   {
+    "name": "cohorts",
+    "label": "Cohortes (mois)",
+    "type": "int",
+    "min": 4,
+    "max": 12,
+    "default": 8
+   },
+   {
+    "name": "periods",
+    "label": "Mois de suivi",
+    "type": "int",
+    "min": 4,
+    "max": 12,
+    "default": 8
+   },
+   {
+    "name": "decay",
+    "label": "Vitesse de perte",
+    "type": "float",
+    "min": 0.1,
+    "max": 1.0,
+    "default": 0.35
+   },
+   {
+    "name": "improvement",
+    "label": "Amélioration par cohorte (%)",
+    "type": "float",
+    "min": 0.0,
+    "max": 10.0,
+    "default": 3.0
+   },
+   {
+    "name": "noise",
+    "label": "Bruit (points)",
+    "type": "float",
+    "min": 0.0,
+    "max": 5.0,
+    "default": 1.5
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "data_cleaning_report",
+  "title": "data_cleaning_report : audit de qualité d'un fichier de ventes (première étape de toute analyse).",
+  "render": "text",
+  "file": "public/algos/data_cleaning_report.py",
+  "params": [
+   {
+    "name": "rows",
+    "label": "Lignes du fichier",
+    "type": "int",
+    "min": 20,
+    "max": 500,
+    "default": 100
+   },
+   {
+    "name": "duplicate_rate",
+    "label": "Doublons (%)",
+    "type": "float",
+    "min": 0.0,
+    "max": 20.0,
+    "default": 5.0
+   },
+   {
+    "name": "missing_rate",
+    "label": "Valeurs manquantes (%)",
+    "type": "float",
+    "min": 0.0,
+    "max": 30.0,
+    "default": 8.0
+   },
+   {
+    "name": "outlier_rate",
+    "label": "Montants aberrants (%)",
+    "type": "float",
+    "min": 0.0,
+    "max": 10.0,
+    "default": 3.0
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "eoq_inventory",
+  "title": "eoq_inventory : quantité économique de commande (formule de Wilson).",
+  "render": "image",
+  "file": "public/algos/eoq_inventory.py",
+  "params": [
+   {
+    "name": "annual_demand",
+    "label": "Demande annuelle (unités)",
+    "type": "int",
+    "min": 100,
+    "max": 100000,
+    "default": 12000
+   },
+   {
+    "name": "order_cost",
+    "label": "Coût d'une commande (€)",
+    "type": "float",
+    "min": 5.0,
+    "max": 1000.0,
+    "default": 80.0
+   },
+   {
+    "name": "holding_cost",
+    "label": "Coût de stockage par unité et par an (€)",
+    "type": "float",
+    "min": 0.1,
+    "max": 100.0,
+    "default": 2.4
+   }
+  ]
+ },
+ {
+  "id": "funnel_conversion",
+  "title": "funnel_conversion : entonnoir de conversion d'un site marchand.",
+  "render": "image",
+  "file": "public/algos/funnel_conversion.py",
+  "params": [
+   {
+    "name": "visitors",
+    "label": "Visiteurs au départ",
+    "type": "int",
+    "min": 1000,
+    "max": 1000000,
+    "default": 50000
+   },
+   {
+    "name": "steps",
+    "label": "Étapes",
+    "type": "int",
+    "min": 3,
+    "max": 6,
+    "default": 5
+   },
+   {
+    "name": "drop_rate",
+    "label": "Abandon moyen par étape (%)",
+    "type": "int",
+    "min": 10,
+    "max": 70,
+    "default": 45
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "kmeans_customers",
+  "title": "kmeans_customers : segmentation de clients par K-means (apprentissage non supervisé).",
+  "render": "points",
+  "file": "public/algos/kmeans_customers.py",
+  "params": [
+   {
+    "name": "customers",
+    "label": "Clients",
+    "type": "int",
+    "min": 60,
+    "max": 600,
+    "default": 240
+   },
+   {
+    "name": "clusters",
+    "label": "Segments (k)",
+    "type": "int",
+    "min": 2,
+    "max": 6,
+    "default": 4
+   },
+   {
+    "name": "iterations",
+    "label": "Itérations maximum",
+    "type": "int",
+    "min": 1,
+    "max": 50,
+    "default": 15
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "monte_carlo_budget",
+  "title": "monte_carlo_budget : simulation de Monte-Carlo du coût total d'un projet.",
+  "render": "image",
+  "file": "public/algos/monte_carlo_budget.py",
+  "params": [
+   {
+    "name": "tasks",
+    "label": "Tâches du projet",
+    "type": "int",
+    "min": 3,
+    "max": 12,
+    "default": 6
+   },
+   {
+    "name": "simulations",
+    "label": "Simulations",
+    "type": "int",
+    "min": 500,
+    "max": 20000,
+    "default": 5000
+   },
+   {
+    "name": "confidence",
+    "label": "Niveau de confiance (%)",
+    "type": "int",
+    "min": 50,
+    "max": 99,
+    "default": 80
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "moving_average_forecast",
+  "title": "moving_average_forecast : ventes mensuelles, moyenne mobile et prévision par tendance linéaire.",
+  "render": "image",
+  "file": "public/algos/moving_average_forecast.py",
+  "params": [
+   {
+    "name": "months",
+    "label": "Mois d'historique",
+    "type": "int",
+    "min": 12,
+    "max": 48,
+    "default": 24
+   },
+   {
+    "name": "window",
+    "label": "Fenêtre de la moyenne mobile",
+    "type": "int",
+    "min": 2,
+    "max": 6,
+    "default": 3
+   },
+   {
+    "name": "horizon",
+    "label": "Mois à prévoir",
+    "type": "int",
+    "min": 1,
+    "max": 12,
+    "default": 6
+   },
+   {
+    "name": "trend",
+    "label": "Tendance (unités par mois)",
+    "type": "float",
+    "min": -5.0,
+    "max": 20.0,
+    "default": 4.0
+   },
+   {
+    "name": "seasonality",
+    "label": "Saisonnalité",
+    "type": "float",
+    "min": 0.0,
+    "max": 40.0,
+    "default": 15.0
+   },
+   {
+    "name": "noise",
+    "label": "Bruit",
+    "type": "float",
+    "min": 0.0,
+    "max": 30.0,
+    "default": 8.0
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "pareto_chart",
+  "title": "pareto_chart : diagramme de Pareto (règle des 80/20) des causes de réclamations.",
+  "render": "image",
+  "file": "public/algos/pareto_chart.py",
+  "params": [
+   {
+    "name": "causes",
+    "label": "Nombre de causes",
+    "type": "int",
+    "min": 4,
+    "max": 12,
+    "default": 8
+   },
+   {
+    "name": "skew",
+    "label": "Concentration (plus haut = plus inégal)",
+    "type": "float",
+    "min": 0.5,
+    "max": 3.0,
+    "default": 1.5
+   },
+   {
+    "name": "total",
+    "label": "Réclamations au total",
+    "type": "int",
+    "min": 200,
+    "max": 5000,
+    "default": 1000
+   },
+   {
+    "name": "threshold",
+    "label": "Seuil (%)",
+    "type": "int",
+    "min": 50,
+    "max": 95,
+    "default": 80
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "regression_scatter",
+  "title": "regression_scatter : nuage de points et droite de régression (moindres carrés), avec r et R².",
+  "render": "image",
+  "file": "public/algos/regression_scatter.py",
+  "params": [
+   {
+    "name": "n",
+    "label": "Nombre de points",
+    "type": "int",
+    "min": 20,
+    "max": 300,
+    "default": 80
+   },
+   {
+    "name": "slope",
+    "label": "Pente réelle",
+    "type": "float",
+    "min": -5.0,
+    "max": 5.0,
+    "default": 2.0
+   },
+   {
+    "name": "intercept",
+    "label": "Ordonnée à l'origine réelle",
+    "type": "float",
+    "min": -50.0,
+    "max": 50.0,
+    "default": 10.0
+   },
+   {
+    "name": "noise",
+    "label": "Bruit",
+    "type": "float",
+    "min": 0.0,
+    "max": 30.0,
+    "default": 8.0
+   },
+   {
+    "name": "outliers",
+    "label": "Valeurs aberrantes",
+    "type": "int",
+    "min": 0,
+    "max": 10,
+    "default": 0
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "waterfall_profit",
+  "title": "waterfall_profit : du chiffre d'affaires au résultat net, en cascade (graphique en cascade ou « waterfall »).",
+  "render": "image",
+  "file": "public/algos/waterfall_profit.py",
+  "params": [
+   {
+    "name": "revenue",
+    "label": "Chiffre d'affaires (€)",
+    "type": "int",
+    "min": 10000,
+    "max": 1000000,
+    "default": 200000
+   },
+   {
+    "name": "cogs_pct",
+    "label": "Coût des ventes (% du CA)",
+    "type": "float",
+    "min": 20.0,
+    "max": 80.0,
+    "default": 45.0
+   },
+   {
+    "name": "marketing_pct",
+    "label": "Marketing (% du CA)",
+    "type": "float",
+    "min": 2.0,
+    "max": 30.0,
+    "default": 12.0
+   },
+   {
+    "name": "salaries_pct",
+    "label": "Salaires (% du CA)",
+    "type": "float",
+    "min": 5.0,
+    "max": 40.0,
+    "default": 22.0
+   },
+   {
+    "name": "other_pct",
+    "label": "Autres charges (% du CA)",
+    "type": "float",
+    "min": 0.0,
+    "max": 20.0,
+    "default": 6.0
+   },
+   {
+    "name": "tax_rate",
+    "label": "Taux d'impôt (%)",
+    "type": "float",
+    "min": 0.0,
+    "max": 40.0,
+    "default": 25.0
+   }
+  ]
+ }
+]

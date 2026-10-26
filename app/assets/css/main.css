@@ -1,0 +1,1351 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@import "vidstack/player/styles/base.css";
+@import "vidstack/player/styles/default/theme.css";
+@import "vidstack/player/styles/default/layouts/video.css";
+
+/* Palette du site anniversaire, pilotée par useThemeStore.ts. */
+
+@theme static {
+  --font-sans: 'Nunito', 'Avenir Next', sans-serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-script: 'Parisienne', 'Segoe Script', cursive;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+/* ----------------------------------------------------------
+   0. PONT NUXT UI — les composants UButton/UBadge/UInput lisent
+   les tokens --ui-color-*. On les fait pointer vers nos propres
+   variables --primary-color / --accent-color pour qu'ils suivent
+   le thème (persona/cyberpunk, dark/light) sans reconfigurer
+   Tailwind à chaque changement de style.
+   ---------------------------------------------------------- */
+:root {
+  --ui-color-primary-500: var(--primary-color);
+  --ui-color-primary-400: var(--primary-color);
+  --ui-color-primary-600: var(--primary-color);
+  --ui-color-secondary-500: var(--accent-color);
+  --ui-border: var(--border-color);
+  --ui-border-muted: var(--border-color);
+  --ui-border-accented: rgba(var(--primary-color-rgb), 0.28);
+}
+
+/* ----------------------------------------------------------
+   1. VALEURS PAR DÉFAUT (évite un flash non stylé avant hydrate())
+   ---------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  --bg-color: #241720;
+  --bg-color-soft: #33212c;
+  --primary-color: #c94e7b;
+  --primary-color-rgb: 201, 78, 123;
+  --accent-color: #f0a9c0;
+  --accent-color-rgb: 240, 169, 192;
+  --text-color: #fff7fa;
+  --muted-color: #ddc4ce;
+  --panel-color: rgba(51, 33, 44, 0.92);
+  --panel-color-solid: #402a36;
+  --border-color: rgba(255, 225, 235, 0.18);
+  --theme-heading: #ffd8e5;
+  --theme-accent-text: #ffbfd2;
+  --theme-muted-text: #dbc4cd;
+  --theme-panel: rgba(255, 255, 255, 0.07);
+  --theme-panel-solid: #2f1d27;
+  --theme-surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(var(--primary-color-rgb), 0.22) 55%, rgba(var(--accent-color-rgb), 0.18));
+  --theme-soft-primary: rgba(var(--primary-color-rgb), 0.2);
+  --theme-soft-accent: rgba(var(--accent-color-rgb), 0.16);
+  --clip-path: none;
+  --clip-path-sm: none;
+  --grid-line: rgba(255, 225, 235, 0.05);
+  --scan-color: rgba(201, 78, 123, 0.6);
+  --shadow-glow: 0 0 32px -8px rgba(var(--primary-color-rgb), 0.34);
+}
+
+/* ============================================================
+   2. THÈME : DARK vs LIGHT (luminosité globale)
+   Le style Persona/Cyberpunk reste actif par-dessus.
+   ============================================================ */
+html.theme-dark {
+  color-scheme: dark;
+  --bg-color: #1d1219;
+  --bg-color-soft: #291a22;
+  --text-color: #fff4f8;
+  --muted-color: #d4bac5;
+  --panel-color: rgba(41, 26, 34, 0.9);
+  --panel-color-solid: #301f29;
+  --border-color: rgba(255, 225, 235, 0.14);
+  --theme-heading: #ffd9e7;
+  --theme-accent-text: #ffbfd2;
+  --theme-muted-text: #dbc4cd;
+  --theme-panel: rgba(255, 255, 255, 0.07);
+  --theme-panel-solid: #2f1d27;
+  --theme-surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(var(--primary-color-rgb), 0.22) 55%, rgba(var(--accent-color-rgb), 0.18));
+  --theme-soft-primary: rgba(var(--primary-color-rgb), 0.2);
+  --theme-soft-accent: rgba(var(--accent-color-rgb), 0.16);
+  --grid-line: rgba(var(--accent-color-rgb), 0.06);
+}
+
+html.theme-light {
+  color-scheme: light;
+  --bg-color: #fff8fb;
+  --bg-color-soft: #ffffff;
+  --text-color: #3b2530;
+  --muted-color: #806975;
+  --panel-color: rgba(255, 255, 255, 0.86);
+  --panel-color-solid: #ffffff;
+  --border-color: rgba(var(--primary-color-rgb), 0.18);
+  --theme-heading: color-mix(in srgb, var(--primary-color) 72%, #29161f);
+  --theme-accent-text: color-mix(in srgb, var(--accent-color) 68%, #40202e);
+  --theme-muted-text: #69535d;
+  --theme-panel: rgba(255, 255, 255, 0.82);
+  --theme-panel-solid: #ffffff;
+  --theme-surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(var(--primary-color-rgb), 0.1) 55%, rgba(var(--accent-color-rgb), 0.18));
+  --theme-soft-primary: rgba(var(--primary-color-rgb), 0.12);
+  --theme-soft-accent: rgba(var(--accent-color-rgb), 0.14);
+  --grid-line: rgba(var(--primary-color-rgb), 0.05);
+  --shadow-glow: 0 8px 28px -10px rgba(var(--primary-color-rgb), 0.22);
+}
+
+/* ============================================================
+   3. STYLE : PERSONA (rose profond) vs CYBERPUNK (rose vif)
+   ============================================================ */
+html.style-persona {
+  --primary-color: #c94e7b;
+  --primary-color-rgb: 201, 78, 123;
+  --accent-color: #f0a9c0;
+  --accent-color-rgb: 240, 169, 192;
+  --clip-path: none;
+  --clip-path-sm: none;
+  --scan-color: rgba(201, 78, 123, 0.58);
+}
+
+html.style-cyberpunk {
+  --primary-color: #d54f8e;
+  --primary-color-rgb: 213, 79, 142;
+  --accent-color: #ffb7d1;
+  --accent-color-rgb: 255, 183, 209;
+  --clip-path: none;
+  --clip-path-sm: none;
+  --scan-color: rgba(255, 183, 209, 0.62);
+}
+
+html.style-persona.theme-dark {
+  --bg-color: #241720;
+  --bg-color-soft: #33212c;
+  --text-color: #fff7fa;
+  --muted-color: #ddc4ce;
+  --panel-color: rgba(51, 33, 44, 0.92);
+  --panel-color-solid: #402a36;
+  --border-color: rgba(255, 225, 235, 0.18);
+  --grid-line: rgba(255, 225, 235, 0.05);
+}
+
+html.style-persona.theme-light {
+  --bg-color: #fff8fb;
+  --bg-color-soft: #ffffff;
+  --text-color: #3b2530;
+  --muted-color: #806975;
+  --panel-color: rgba(255, 255, 255, 0.26);
+  --panel-color-solid: rgba(255, 255, 255, 0.78);
+  --border-color: rgba(201, 78, 123, 0.16);
+  --theme-heading: #8d355a;
+  --theme-accent-text: #9a4867;
+  --theme-muted-text: #69535d;
+  --theme-panel: rgba(255, 255, 255, 0.78);
+  --theme-panel-solid: #ffffff;
+  --theme-surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(var(--primary-color-rgb), 0.1) 55%, rgba(var(--accent-color-rgb), 0.18));
+  --theme-soft-primary: rgba(var(--primary-color-rgb), 0.12);
+  --theme-soft-accent: rgba(var(--accent-color-rgb), 0.16);
+  --grid-line: rgba(201, 78, 123, 0.06);
+}
+
+media-player,
+media-community-skin {
+  /* ATTENTION : Vidstack n'expose QUE ces noms-là. Les anciennes variables
+     (--media-controls-bg, --media-text-color, --media-slider-track,
+     --media-slider-fill, --media-slider-thumb) n'existaient pas côté
+     Vidstack : le thème du lecteur ne s'appliquait donc jamais. */
+  --media-brand: var(--primary-color);
+  --media-focus-ring: 0 0 0 2px rgba(var(--primary-color-rgb), 0.5);
+  --media-controls-color: var(--text-color);
+  --media-slider-track-bg: rgba(var(--primary-color-rgb), 0.24);
+  --media-slider-track-fill-bg: var(--primary-color);
+  --media-slider-thumb-bg: var(--text-color);
+  --media-buffering-track-color: rgba(var(--primary-color-rgb), 0.35);
+  --media-buffering-track-fill-color: var(--primary-color);
+}
+
+/* Vidstack peint le fond de la barre de contrôle avec un dégradé noir codé
+   en dur et n'expose aucune variable pour le changer : on le remplace par la
+   teinte rouge du club. Toutes les couleurs viennent du design system. */
+media-player .vds-video-layout .vds-controls[data-visible] {
+  background-image: linear-gradient(
+    to top,
+    rgba(var(--primary-color-rgb), 0.42),
+    rgba(var(--primary-color-rgb), 0.14) 24%,
+    transparent 64%
+  );
+}
+
+/* ============================================================
+   4. BASE GLOBALE
+   ============================================================ */
+html, body, #__nuxt {
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+html, body, #__nuxt {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 850ms ease, color 750ms ease;
+}
+
+.nav-theme-wave {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: var(--wave-size);
+  height: var(--wave-size);
+  border-radius: 48% 52% 57% 43% / 42% 44% 56% 58%;
+  background: var(--bg-color);
+  box-shadow: 0 0 0 1px rgba(var(--primary-color-rgb), 0.12), 0 0 5rem rgba(var(--primary-color-rgb), 0.2);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: center;
+  animation: nav-theme-wave var(--wave-duration, 900ms) cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
+}
+
+@keyframes nav-theme-wave {
+  0% {
+    opacity: 0.92;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  45% {
+    border-radius: 62% 38% 45% 55% / 42% 58% 42% 58%;
+    opacity: 1;
+  }
+
+  78% {
+    border-radius: 38% 62% 57% 43% / 58% 42% 58% 42%;
+    opacity: 0.96;
+  }
+
+  100% {
+    opacity: 0;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* A single token-driven surface system keeps all active pages in the selected theme. */
+.theme-page {
+  background:
+    radial-gradient(circle at 82% 8%, rgba(var(--accent-color-rgb), 0.16), transparent 34%),
+    radial-gradient(circle at 12% 0%, rgba(var(--primary-color-rgb), 0.14), transparent 38%),
+    linear-gradient(180deg, var(--bg-color-soft), var(--bg-color));
+  color: var(--text-color);
+  transition: background 950ms cubic-bezier(0.22, 0.72, 0.2, 1), color 750ms ease;
+}
+
+.site-reveal-ready [data-site-reveal]:not(.site-reveal-visible) {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  filter: blur(2px);
+}
+
+.site-reveal-ready [data-site-reveal-variant="drift-left"]:not(.site-reveal-visible) {
+  transform: translate3d(-10px, 8px, 0);
+}
+
+.site-reveal-ready [data-site-reveal-variant="drift-right"]:not(.site-reveal-visible) {
+  transform: translate3d(10px, 8px, 0);
+}
+
+.site-reveal-ready [data-site-reveal-variant="soft-scale"]:not(.site-reveal-visible) {
+  transform: translate3d(0, 8px, 0) scale(0.985);
+}
+
+.site-reveal-ready [data-site-reveal] {
+  transition: opacity 480ms cubic-bezier(0.22, 1, 0.36, 1), transform 480ms cubic-bezier(0.22, 1, 0.36, 1), filter 480ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--site-reveal-delay, 0ms);
+}
+
+.site-reveal-ready [data-site-reveal].site-reveal-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+.theme-page--anniversaire.site-reveal-ready > section[data-site-reveal]:not(.site-reveal-visible) {
+  transform: translate3d(0, 30px, 0);
+  filter: none;
+}
+
+.theme-page--anniversaire.site-reveal-ready > section[data-site-reveal] {
+  transition:
+    opacity 720ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 820ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-page--anniversaire.site-reveal-ready > section[data-site-reveal].site-reveal-visible {
+  transform: translate3d(0, 0, 0);
+}
+
+.theme-page [class*="text-violet-"],
+.theme-page [class*="text-pink-"],
+.theme-page [class*="text-rose-"],
+.theme-page [class*="text-fuchsia-"],
+.theme-page [class*="text-[#"],
+.theme-page [class~="text-white"] {
+  transition: color 750ms ease;
+}
+.theme-page [class*="text-violet-"] { color: var(--theme-heading) !important; }
+.theme-page [class*="text-pink-"],
+.theme-page [class*="text-rose-"],
+.theme-page [class*="text-fuchsia-"] { color: var(--theme-accent-text) !important; }
+.theme-page [class*="text-[#"] { color: var(--theme-muted-text) !important; }
+.theme-page [class~="text-white"] { color: var(--text-color) !important; }
+.theme-page [class*="text-teal-"],
+.theme-page [class*="text-emerald-"],
+.theme-page [class*="text-green-"] { color: var(--primary-color) !important; }
+.theme-page [class*="text-sky-"],
+.theme-page [class*="text-amber-"] { color: var(--accent-color) !important; }
+.theme-page [class*="fill-amber-"],
+.theme-page [class*="fill-sky-"] { fill: var(--accent-color) !important; }
+.theme-page [class*="shadow-teal-"] { --tw-shadow-color: rgba(var(--primary-color-rgb), 0.2) !important; }
+.theme-page input[type="range"] { accent-color: var(--primary-color) !important; }
+
+.theme-page [class*="bg-white/"],
+.theme-page [class*="bg-violet-100"],
+.theme-page [class*="bg-violet-200/"],
+.theme-page [class*="bg-pink-200/"],
+.theme-page [class*="bg-pink-400/"],
+.theme-page [class*="bg-pink-500/"],
+.theme-page [class*="bg-rose-"],
+.theme-page [class*="bg-[#"],
+.theme-page [class~="bg-violet-700"],
+.theme-page [class~="bg-violet-800"],
+.theme-page [class~="bg-pink-500"] {
+  transition: background-color 750ms ease, border-color 750ms ease, box-shadow 750ms ease;
+}
+.theme-page [class*="bg-white/"] { background-color: var(--theme-panel) !important; }
+.theme-page [class*="bg-violet-100"],
+.theme-page [class*="bg-violet-200/"],
+.theme-page [class*="bg-pink-200/"],
+.theme-page [class*="bg-pink-400/"],
+.theme-page [class*="bg-pink-500/"] { background-color: var(--theme-soft-primary) !important; }
+.theme-page [class*="bg-rose-"] { background-color: var(--theme-soft-accent) !important; }
+.theme-page [class*="bg-[linear-gradient"] {
+  background: var(--theme-surface-gradient) !important;
+  transition: background 850ms cubic-bezier(0.22, 0.72, 0.2, 1), border-color 750ms ease, box-shadow 750ms ease;
+}
+.theme-page [class*="bg-[#"] { background-color: var(--theme-panel-solid) !important; }
+.theme-page [class~="bg-violet-700"],
+.theme-page [class~="bg-violet-800"] { background-color: var(--primary-color) !important; }
+.theme-page [class~="bg-pink-500"] { background-color: var(--accent-color) !important; }
+.theme-page [class*="bg-teal-"],
+.theme-page [class*="bg-emerald-"],
+.theme-page [class*="bg-green-"] { background-color: var(--theme-soft-primary) !important; }
+.theme-page [class*="bg-sky-"],
+.theme-page [class*="bg-amber-"] { background-color: var(--theme-soft-accent) !important; }
+.theme-page [class*="from-teal-"],
+.theme-page [class*="to-sky-"] { --tw-gradient-from: var(--primary-color) var(--tw-gradient-from-position) !important; --tw-gradient-to: var(--accent-color) var(--tw-gradient-to-position) !important; }
+
+.theme-page [class*="border-violet-"],
+.theme-page [class*="border-pink-"],
+.theme-page [class*="border-rose-"],
+.theme-page [class*="border-white/"] {
+  border-color: var(--border-color) !important;
+  transition: border-color 750ms ease;
+}
+.theme-page [class*="border-teal-"],
+.theme-page [class*="border-emerald-"],
+.theme-page [class*="border-green-"] { border-color: color-mix(in srgb, var(--primary-color) 48%, var(--border-color)) !important; }
+.theme-page [class*="border-sky-"],
+.theme-page [class*="border-amber-"] { border-color: color-mix(in srgb, var(--accent-color) 48%, var(--border-color)) !important; }
+.theme-page [class*="ring-pink-"] { --tw-ring-color: rgba(var(--primary-color-rgb), 0.3) !important; }
+
+.theme-page a[class~="bg-violet-700"],
+.theme-page a[class~="bg-violet-800"],
+.theme-page a[class~="bg-pink-500"] { color: #fff !important; }
+
+.theme-soft-transition,
+.theme-soft-transition body,
+.theme-soft-transition #__nuxt,
+.theme-soft-transition .theme-page {
+  transition-duration: 280ms !important;
+  transition-timing-function: ease-in-out !important;
+}
+
+.theme-soft-transition .theme-page [class*="text-"],
+.theme-soft-transition .theme-page [class*="bg-"],
+.theme-soft-transition .theme-page [class*="border-"] {
+  transition-duration: 280ms !important;
+  transition-timing-function: ease-in-out !important;
+}
+
+.theme-transition-instant,
+.theme-transition-instant * {
+  transition: none !important;
+}
+
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-band-reveal 1500ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  will-change: clip-path;
+}
+
+@keyframes theme-band-reveal {
+  from {
+    clip-path: polygon(-100% 0, -16% 0, -38% 100%, -100% 100%);
+  }
+  52% {
+    clip-path: polygon(-100% 0, 56% 0, 34% 100%, -100% 100%);
+  }
+  to {
+    clip-path: polygon(-100% 0, 124% 0, 102% 100%, -100% 100%);
+  }
+}
+
+.analyst-page [class*="text-slate-50"],
+.analyst-page [class*="text-slate-100"],
+.analyst-page [class~="text-white"] { color: var(--theme-heading) !important; }
+.analyst-page [class*="text-slate-200"],
+.analyst-page [class*="text-slate-300"] { color: var(--text-color) !important; }
+.analyst-page [class*="text-slate-400"],
+.analyst-page [class*="text-slate-500"] { color: var(--theme-muted-text) !important; }
+.analyst-page [class*="text-teal-"] { color: var(--primary-color) !important; }
+.analyst-page [class*="text-sky-"] { color: var(--accent-color) !important; }
+.analyst-page [class*="bg-slate-900/"],
+.analyst-page [class*="bg-slate-950/"] { background-color: var(--theme-panel) !important; }
+.analyst-page [class*="bg-slate-800/"] { background-color: var(--theme-soft-primary) !important; }
+.analyst-page [class~="bg-slate-900"],
+.analyst-page [class~="bg-slate-950"] { background-color: var(--theme-panel-solid) !important; }
+.analyst-page [class*="bg-gradient-to-"] { background: var(--theme-surface-gradient) !important; }
+.analyst-page [class*="border-slate-"] { border-color: var(--border-color) !important; }
+.analyst-page [class*="border-teal-"] { border-color: color-mix(in srgb, var(--primary-color) 48%, var(--border-color)) !important; }
+.analyst-page input,
+.analyst-page select,
+.analyst-page textarea { color: var(--text-color); }
+.analyst-page input::placeholder { color: var(--theme-muted-text); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .site-reveal-ready [data-site-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .nav-theme-wave {
+    display: none;
+  }
+
+}
+
+.birthday-page-enter-active,
+.birthday-page-leave-active {
+  will-change: opacity, transform;
+}
+
+.birthday-page-enter-active {
+  transition: opacity 240ms ease-out, transform 320ms cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+.birthday-page-leave-active {
+  transition: opacity 170ms ease-in, transform 220ms ease-in;
+}
+
+.birthday-page-enter-from {
+  opacity: 0;
+  transform: translate3d(0, 0.85rem, 0) scale(0.99);
+}
+
+.birthday-page-leave-to {
+  opacity: 0;
+  transform: translate3d(0, -0.35rem, 0) scale(0.995);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-page-enter-active,
+  .birthday-page-leave-active {
+    transition: none;
+  }
+}
+
+.app-shell {
+  position: relative;
+  /* Colonne flex + <main> extensible : le pied de page est collé au bas de
+     l'écran. Indispensable car .app-shell réserve toute la hauteur de la
+     fenêtre (classe `min-h-dvh` posée dans app.vue) : en flux de bloc
+     classique, le reliquat non consommé s'affichait SOUS le pied de page
+     (bande vide en bas de page, visible surtout sur grand écran). */
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 48px 48px,
+    radial-gradient(circle at 15% 0%, rgba(var(--primary-color-rgb), 0.14), transparent 32%),
+    radial-gradient(circle at 85% 8%, rgba(var(--accent-color-rgb), 0.1), transparent 28%),
+    var(--bg-color);
+  transition: background-color 0.35s ease;
+}
+
+.style-persona .app-shell {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(var(--primary-color-rgb), 0.16), transparent 34%),
+    radial-gradient(circle at 80% 10%, rgba(var(--accent-color-rgb), 0.08), transparent 26%),
+    var(--bg-color);
+}
+
+/* <main> absorbe le reliquat de hauteur du shell (voir .app-shell ci-dessus)
+   afin que le pied de page reste collé au bas, sans bande vide sous lui. */
+.app-shell > main {
+  flex: 1 1 auto;
+}
+
+/* Le contenu du shell passe au-dessus du calque décoratif d'icônes flottantes
+   (position: fixed, z-index: 0 — voir components/FloatingIcons.vue).
+   On ne cible QUE les éléments de flux : imposer `position: relative` aux
+   widgets flottants (thème / audio / curseur, eux aussi enfants directs du
+   shell) les remettrait DANS le flux et leur hauteur s'ajouterait à la page,
+   ce qui créait un espace vide artificiel en bas de page. */
+.app-shell > header,
+.app-shell > main,
+.app-shell > footer {
+  position: relative;
+  z-index: 1;
+}
+
+.app-shell {
+  --ui-bg: var(--bg-color);
+  --ui-bg-muted: rgba(var(--primary-color-rgb), 0.04);
+  --ui-bg-elevated: var(--bg-color-soft);
+  --ui-bg-accented: rgba(var(--primary-color-rgb), 0.08);
+  --ui-text: var(--text-color);
+  --ui-text-muted: var(--muted-color);
+  --ui-border: var(--border-color);
+  --ui-border-accented: rgba(var(--primary-color-rgb), 0.36);
+}
+
+/* Palette commune pour les contrôles natifs et les champs Nuxt UI. */
+.app-shell input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+.app-shell textarea,
+.app-shell select,
+.app-shell [data-slot="base"] {
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+  background-color: rgba(var(--primary-color-rgb), 0.06) !important;
+  caret-color: var(--primary-color);
+}
+
+.app-shell [data-slot="base"] input,
+.app-shell [data-slot="base"] textarea {
+  color: var(--text-color) !important;
+  background: transparent !important;
+}
+
+.app-shell input::placeholder,
+.app-shell textarea::placeholder {
+  color: var(--muted-color) !important;
+  opacity: 0.85;
+}
+
+.app-shell input:focus,
+.app-shell textarea:focus,
+.app-shell select:focus,
+.app-shell [data-slot="base"]:focus-within {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.14) !important;
+  outline: none;
+}
+
+.app-shell button[data-color="primary"],
+.app-shell [data-slot="base"][data-color="primary"] {
+  border-color: var(--primary-color) !important;
+}
+
+/* ============================================================
+   5. UTILITAIRES DE THÈME
+   ============================================================ */
+.surface-panel,
+.surface-solid {
+  background: var(--panel-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  color: var(--text-color);
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.theme-light .surface-panel,
+.theme-light .surface-solid {
+  background: rgba(255, 250, 250, 0.54);
+  border-color: rgba(var(--primary-color-rgb), 0.14);
+  box-shadow: 0 16px 36px -28px rgba(70, 25, 35, 0.52);
+}
+
+/* Harmonise Nuxt UI : les tokens de bordure restent dans la palette rouge. */
+.app-shell .border-default,
+.app-shell .ring-default,
+.app-shell [data-slot="root"] {
+  border-color: rgba(var(--primary-color-rgb), 0.16) !important;
+}
+
+.app-shell .ring-default {
+  --tw-ring-color: rgba(var(--primary-color-rgb), 0.16) !important;
+}
+
+/* Les cartes utilisent une surface translucide réelle, y compris en clair. */
+.app-shell .bg-white\/5,
+.app-shell .bg-default {
+  background-color: rgba(var(--primary-color-rgb), 0.045) !important;
+}
+
+.theme-light .app-shell .bg-white\/5,
+.theme-light .app-shell .bg-default {
+  background-color: rgba(255, 250, 250, 0.2) !important;
+  box-shadow: 0 18px 40px -30px rgba(70, 25, 35, 0.58);
+}
+.text-muted { color: var(--muted-color); }
+.text-brand { color: var(--primary-color); }
+.text-accent-otaku { color: var(--accent-color); }
+.border-brand { border-color: var(--border-color); }
+.bg-brand-soft { background: rgba(var(--primary-color-rgb), 0.12); }
+.bg-accent-soft { background: rgba(var(--accent-color-rgb), 0.12); }
+.clip-corner,
+.clip-corner-sm { clip-path: none; border-radius: 1.25rem; }
+
+/* ============================================================
+   6. TYPOGRAPHIE SIGNATURE
+   ============================================================ */
+.font-display { font-family: var(--font-display); letter-spacing: 0.04em; }
+.font-mono-otaku { font-family: var(--font-mono); }
+
+.text-gradient-otaku {
+  background: linear-gradient(120deg, var(--primary-color), var(--accent-color) 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-otaku .char {
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================================================
+   7. CARTES / GLOW
+   ============================================================ */
+.neon-border,
+.neon-glow { box-shadow: none; }
+
+/* ============================================================
+   8. INTRO LOADER
+   ============================================================ */
+.intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, rgba(var(--primary-color-rgb), 0.16), transparent 55%), #030207;
+}
+
+.intro-loader__grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background:
+    linear-gradient(rgba(var(--accent-color-rgb), 0.09) 1px, transparent 1px) 0 0 / 42px 42px,
+    linear-gradient(90deg, rgba(var(--accent-color-rgb), 0.09) 1px, transparent 1px) 0 0 / 42px 42px;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 75%);
+  mask-image: radial-gradient(circle at 50% 50%, black, transparent 75%);
+}
+
+.intro-loader__slash {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: 3px;
+  height: 130%;
+  background: linear-gradient(var(--primary-color), var(--accent-color));
+  box-shadow: 0 0 24px 2px rgba(var(--primary-color-rgb), 0.7);
+  will-change: transform, opacity;
+}
+
+.intro-loader__scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--scan-color), transparent);
+  box-shadow: 0 0 16px 2px var(--scan-color);
+  will-change: transform, opacity;
+}
+
+.intro-loader__mark {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: 0 auto 1.5rem;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #030207;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  border-radius: 1.25rem;
+  will-change: transform, opacity;
+}
+
+.intro-loader__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  will-change: transform, opacity;
+}
+
+.intro-loader__title {
+  margin-top: 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  line-height: 0.95;
+  color: #f4f2fb;
+  letter-spacing: 0.02em;
+  will-change: transform, opacity;
+}
+
+.intro-loader__title span { color: var(--primary-color); }
+
+.intro-loader__status {
+  margin-top: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted-color);
+  will-change: transform, opacity;
+}
+
+.intro-loader__bar-track {
+  position: relative;
+  width: min(280px, 60vw);
+  height: 3px;
+  margin: 1.5rem auto 0;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.intro-loader__bar-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  will-change: transform;
+}
+
+/* ============================================================
+   9. THEME SWITCHER
+   ============================================================ */
+.theme-switcher__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 0.85rem;
+  color: var(--text-color);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.18s ease, opacity 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+  will-change: transform;
+}
+
+.theme-switcher__button:hover {
+  border-color: rgba(var(--primary-color-rgb), 0.4);
+  background: rgba(var(--primary-color-rgb), 0.08);
+  transform: translateY(-1px);
+}
+
+.theme-switcher__button:active { transform: scale(0.94); }
+
+.theme-switcher__button--pulse { animation: switcher-pulse 0.22s ease; }
+
+@keyframes switcher-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.9); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================================
+   10. SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-color); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--primary-color), var(--accent-color));
+  border-radius: 8px;
+}
+
+/* ============================================================
+   11. DRAG & DROP — états visuels partagés
+   ============================================================ */
+.dnd-ghost { opacity: 0.35; background: var(--panel-color-solid) !important; }
+.dnd-drag {
+  box-shadow: 0 0 0 2px var(--primary-color), 0 16px 32px -10px rgba(0, 0, 0, 0.55);
+  cursor: grabbing;
+}
+
+/* ============================================================
+   12. TOASTS — vue3-toastify, coins biseautés + néon (voir useGameToast.ts)
+   ============================================================ */
+.Toastify__toast.otaku-toast {
+  background: var(--panel-color-solid);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+}
+
+.otaku-toast--success { border-color: rgba(var(--accent-color-rgb), 0.5); }
+.otaku-toast--success .Toastify__progress-bar { background: var(--accent-color); }
+
+.otaku-toast--alert { border-color: rgba(var(--primary-color-rgb), 0.55); }
+.otaku-toast--alert .Toastify__progress-bar { background: var(--primary-color); }
+
+.otaku-toast--info { border-color: var(--border-color); }
+.otaku-toast--info .Toastify__progress-bar { background: var(--muted-color); }
+
+.otaku-toast__body {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ============================================================
+   13. CURSEUR GLOW (désactivé sur touch, voir CursorGlow.vue)
+   ============================================================ */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 340px;
+  height: 340px;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 30;
+  background: radial-gradient(circle, rgba(var(--primary-color-rgb), 0.12), rgba(var(--accent-color-rgb), 0.06) 45%, transparent 70%);
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+
+/* ============================================================
+   14. TEXTE RICHE — éditeur (RichTextEditor) et affichage (RichTextContent)
+
+   HISTORIQUE / CAUSE RACINE D'UN BUG SIGNALÉ
+   ------------------------------------------
+   Ces règles vivaient par erreur À L'INTÉRIEUR du bloc
+   `@media (prefers-reduced-motion: reduce)` de la section 4 : sur tout poste
+   n'ayant pas désactivé les animations dans son système (le cas quasi général),
+   AUCUNE de ces règles ne s'appliquait. La zone de saisie n'avait donc ni
+   hauteur minimale, ni bordure, ni couleur : le libellé « Résumé » s'affichait
+   mais le champ restait invisible. Elles sont désormais hors média query.
+   ============================================================ */
+
+.rich-text-editor {
+  --rte-min-height: 10rem;
+  --rte-surface: rgba(var(--primary-color-rgb), 0.03);
+  --rte-toolbar-surface: rgba(var(--primary-color-rgb), 0.045);
+  --rte-code-surface: rgba(36, 16, 22, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  background: var(--rte-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+html.theme-dark .rich-text-editor {
+  --rte-surface: rgba(255, 255, 255, 0.035);
+  --rte-toolbar-surface: rgba(255, 255, 255, 0.05);
+  --rte-code-surface: rgba(255, 255, 255, 0.09);
+}
+
+.rich-text-editor:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.16);
+}
+
+.rich-text-editor.is-disabled {
+  opacity: 0.65;
+}
+
+.rich-text-editor__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.85rem 0.2rem;
+  color: var(--text-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.rich-text-editor__required {
+  color: var(--primary-color);
+}
+
+/* --- Barre d'outils : s'enroule au lieu de déborder sur mobile ---------- */
+.rich-text-editor__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem;
+  row-gap: 0.3rem;
+  /* Garde-fous anti-débordement : la barre peut s'enrouler sur plusieurs
+     rangées, mais jamais élargir la page (les boutons ne rétrécissent pas,
+     donc sans ces deux règles une barre trop large pousserait le document
+     horizontalement sur un écran étroit). */
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 0.4rem 0.45rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--rte-toolbar-surface);
+}
+
+.rich-text-editor__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.rich-text-editor__divider {
+  width: 1px;
+  height: 1.35rem;
+  margin: 0 0.3rem;
+  background: var(--border-color);
+}
+
+.rich-text-editor__btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--muted-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.rich-text-editor__btn:hover:not(:disabled) {
+  background: rgba(var(--primary-color-rgb), 0.12);
+  color: var(--text-color);
+}
+
+.rich-text-editor__btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
+}
+
+.rich-text-editor__btn[aria-pressed="true"],
+.rich-text-editor__btn.is-active {
+  border-color: rgba(var(--primary-color-rgb), 0.45);
+  background: rgba(var(--primary-color-rgb), 0.18);
+  color: var(--primary-color);
+}
+
+html.theme-dark .rich-text-editor__btn[aria-pressed="true"],
+html.theme-dark .rich-text-editor__btn.is-active {
+  color: #ffbdc6;
+}
+
+.rich-text-editor__btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.rich-text-editor__btn--text {
+  width: auto;
+  padding: 0 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.rich-text-editor__btn--icon-text {
+  gap: 0.3rem;
+}
+
+/* --- Barres de saisie annexes (lien, image) ---------------------------- */
+.rich-text-editor__popover {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--rte-toolbar-surface);
+}
+
+.rich-text-editor__input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--bg-color-soft, #fff);
+  color: var(--text-color);
+  font-size: 0.82rem;
+}
+
+.rich-text-editor__input::placeholder { color: var(--muted-color); }
+
+.rich-text-editor__input:focus-visible {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.14);
+  outline: none;
+}
+
+.rich-text-editor__palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rich-text-editor__swatch {
+  width: 1.3rem;
+  height: 1.3rem;
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.rich-text-editor__swatch:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
+}
+
+/* --- Zone de saisie : TOUJOURS visible ------------------------------- */
+.rich-text-editor__content {
+  min-height: var(--rte-min-height);
+  padding: 0.85rem 1rem;
+  outline: none;
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  caret-color: var(--primary-color);
+}
+
+.rich-text-editor__content:focus,
+.rich-text-editor__content:focus-visible {
+  outline: none;
+}
+
+.rich-text-editor--compact .rich-text-editor__content {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.88rem;
+}
+
+.rich-text-editor.is-dragover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.rich-text-editor__content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: var(--muted-color);
+  pointer-events: none;
+}
+
+/* --- Pied de l'éditeur : compteur de caractères ----------------------- */
+.rich-text-editor__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--muted-color);
+  font-size: 0.72rem;
+}
+
+.rich-text-editor__counter--over {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.rich-text-editor__hint {
+  font-style: italic;
+}
+
+/* --- Typographie PARTAGÉE entre l'édition et l'affichage -------------- */
+.rich-text-editor__content p,
+.rich-text-content p {
+  margin: 0.5rem 0;
+}
+
+.rich-text-editor__content h2,
+.rich-text-content h2,
+.rich-text-editor__content h3,
+.rich-text-content h3,
+.rich-text-editor__content h4,
+.rich-text-content h4 {
+  margin: 0.9rem 0 0.4rem;
+  color: var(--text-color);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.rich-text-editor__content h2,
+.rich-text-content h2 { font-size: 1.25rem; }
+
+.rich-text-editor__content h3,
+.rich-text-content h3 { font-size: 1.08rem; }
+
+.rich-text-editor__content h4,
+.rich-text-content h4 { font-size: 0.98rem; }
+
+.rich-text-editor__content ul,
+.rich-text-content ul {
+  margin: 0.5rem 0;
+  padding-left: 1.35rem;
+  list-style: disc;
+}
+
+.rich-text-editor__content ol,
+.rich-text-content ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  list-style: decimal;
+}
+
+.rich-text-editor__content li,
+.rich-text-content li {
+  margin: 0.2rem 0;
+}
+
+.rich-text-editor__content blockquote,
+.rich-text-content blockquote {
+  margin: 0.7rem 0;
+  padding: 0.35rem 0 0.35rem 0.85rem;
+  border-left: 3px solid var(--primary-color);
+  color: var(--muted-color);
+  font-style: italic;
+}
+
+.rich-text-editor__content pre,
+.rich-text-content pre {
+  margin: 0.6rem 0;
+  padding: 0.7rem 0.85rem;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.6rem;
+  background: var(--rte-code-surface, rgba(36, 16, 22, 0.06));
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.rich-text-editor__content code,
+.rich-text-content code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.35rem;
+  background: var(--rte-code-surface, rgba(36, 16, 22, 0.06));
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+html.theme-dark .rich-text-editor__content pre,
+html.theme-dark .rich-text-content pre,
+html.theme-dark .rich-text-editor__content code,
+html.theme-dark .rich-text-content code {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.rich-text-editor__content pre code,
+.rich-text-content pre code {
+  padding: 0;
+  background: transparent;
+  font-size: inherit;
+}
+
+.rich-text-editor__content a,
+.rich-text-content a {
+  color: var(--primary-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+html.theme-dark .rich-text-editor__content a,
+html.theme-dark .rich-text-content a {
+  color: #ff9aa8;
+}
+
+.rich-text-editor__content hr,
+.rich-text-content hr {
+  margin: 1rem 0;
+  border: 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.rich-text-editor__content img,
+.rich-text-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 0.5rem 0;
+  border: 1px solid var(--border-color);
+  border-radius: 0.6rem;
+}
+
+.rich-text-editor__content mark,
+.rich-text-content mark {
+  padding: 0.05rem 0.15rem;
+  border-radius: 0.25rem;
+  background: rgba(255, 214, 10, 0.42);
+  color: inherit;
+}
+
+html.theme-dark .rich-text-editor__content mark,
+html.theme-dark .rich-text-content mark {
+  background: rgba(255, 214, 10, 0.3);
+}
+
+.rich-text-editor__content strong,
+.rich-text-content strong { font-weight: 700; }
+
+.rich-text-editor__content em,
+.rich-text-content em { font-style: italic; }
+
+.rich-text-editor__content u,
+.rich-text-content u { text-decoration: underline; }
+
+.rich-text-editor__content s,
+.rich-text-content s { text-decoration: line-through; }
+
+/* --- Contenu ENREGISTRÉ (lecture seule) ------------------------------- */
+.rich-text-content {
+  color: inherit;
+  line-height: 1.65;
+  word-wrap: break-word;
+}
+
+.rich-text-content > :first-child { margin-top: 0; }
+.rich-text-content > :last-child { margin-bottom: 0; }
+
+/* --- Mobile : barre enroulée SUR UNE HAUTEUR BORNÉE -------------------
+   La barre compte 26 boutons (historique, titres, mise en forme, blocs,
+   alignement, insertions). Sur un téléphone, un simple enroulement occupe
+   jusqu'à 4 rangées et repousse la zone de saisie — voire le bouton
+   d'enregistrement — hors de l'écran. On borne donc la hauteur et on rend la
+   barre défilable VERTICALEMENT : rien n'est caché, rien ne déborde
+   horizontalement, et le clavier reste visible.
+
+   `(pointer: coarse)` cible les écrans TACTILES quel que soit leur libellé
+   (tablette incluse) : les cibles passent de 32 px à 36 px, lisible et
+   atteignable au doigt sans élargir la page. */
+@media (max-width: 640px) {
+  * {
+    overscroll-behavior-y: auto;
+  }
+
+  .rich-text-editor__toolbar {
+    max-height: 7.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    gap: 0.1rem;
+    row-gap: 0.25rem;
+    padding: 0.35rem;
+  }
+
+  .rich-text-editor__divider {
+    height: 1.1rem;
+    margin: 0 0.12rem;
+  }
+
+  .rich-text-editor__btn {
+    width: 1.95rem;
+    height: 1.95rem;
+  }
+
+  .rich-text-editor__content {
+    padding: 0.7rem 0.75rem;
+    font-size: 0.88rem;
+  }
+
+  /* Champs des panneaux (lien, image) : pleine largeur, jamais de débordement. */
+  .rich-text-editor__input {
+    flex: 1 1 100%;
+  }
+
+  .rich-text-editor__popover {
+    padding: 0.5rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .rich-text-editor__btn {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .rich-text-editor__swatch {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}

@@ -1,0 +1,10 @@
+# EXEMPLE À ADAPTER : le fichier de navigation de votre projet n'a pas été fourni.
+# Il montre seulement la forme du changement : un lien vers /analyste dans le menu.
+# Remplacez le chemin et le contexte par ceux de votre composant de navigation réel.
+--- a/app/components/AppNav.vue
++++ b/app/components/AppNav.vue
+@@ -10,6 +10,7 @@
+       <NuxtLink to="/jeu">Jeux</NuxtLink>
++      <NuxtLink to="/analyste">Bureau de l'analyste</NuxtLink>
+       <NuxtLink to="/algos">Algorithmes</NuxtLink>
+     </nav>

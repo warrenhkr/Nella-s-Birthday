@@ -1,0 +1,1274 @@
+[
+ {
+  "id": "caesar_love_message",
+  "doc": "caesar_love_message (algo 16) : chiffre de César, affiché comme dans un terminal.",
+  "render": "text",
+  "file": "public/algos/caesar_love_message.py",
+  "params": [
+   {
+    "name": "message",
+    "label": "Message",
+    "type": "str",
+    "min": 1,
+    "max": 80,
+    "default": "JOYEUX ANNIVERSAIRE"
+   },
+   {
+    "name": "shift",
+    "label": "Décalage",
+    "type": "int",
+    "min": 1,
+    "max": 25,
+    "default": 7
+   },
+   {
+    "name": "mode",
+    "label": "Mode",
+    "type": "select",
+    "options": [
+     "chiffrer",
+     "déchiffrer",
+     "animation"
+    ],
+    "default": "animation"
+   },
+   {
+    "name": "color",
+    "label": "Couleur",
+    "type": "str",
+    "min": 7,
+    "max": 7,
+    "default": "#c4b5fd"
+   }
+  ]
+ },
+ {
+  "id": "fibonacci_sunflower",
+  "doc": "fibonacci_sunflower (algo 13) : tournesol de points placés selon l'angle d'or.",
+  "render": "points",
+  "file": "public/algos/fibonacci_sunflower.py",
+  "params": [
+   {
+    "name": "count",
+    "label": "Nombre de points",
+    "type": "int",
+    "min": 100,
+    "max": 3000,
+    "default": 900
+   },
+   {
+    "name": "angle",
+    "label": "Angle (degrés)",
+    "type": "float",
+    "min": 100.0,
+    "max": 180.0,
+    "default": 137.5
+   },
+   {
+    "name": "spread",
+    "label": "Écartement",
+    "type": "float",
+    "min": 2.0,
+    "max": 14.0,
+    "default": 7.0
+   },
+   {
+    "name": "size",
+    "label": "Taille des points",
+    "type": "float",
+    "min": 1.0,
+    "max": 8.0,
+    "default": 3.0
+   },
+   {
+    "name": "palette_mode",
+    "label": "Palette",
+    "type": "select",
+    "options": [
+     "rose",
+     "violet",
+     "mixte"
+    ],
+    "default": "violet"
+   },
+   {
+    "name": "frames",
+    "label": "Images de rotation (1 = fixe)",
+    "type": "int",
+    "min": 1,
+    "max": 24,
+    "default": 1
+   }
+  ]
+ },
+ {
+  "id": "flood_fill_paint",
+  "doc": "flood_fill_paint (algo 19) : remplissage d'un coeur par propagation (BFS ou DFS).",
+  "render": "frames",
+  "file": "public/algos/flood_fill_paint.py",
+  "params": [
+   {
+    "name": "grid_size",
+    "label": "Taille de la grille",
+    "type": "int",
+    "min": 20,
+    "max": 120,
+    "default": 60
+   },
+   {
+    "name": "start_x",
+    "label": "Départ x (0 à 1)",
+    "type": "float",
+    "min": 0.0,
+    "max": 1.0,
+    "default": 0.5
+   },
+   {
+    "name": "start_y",
+    "label": "Départ y (0 à 1)",
+    "type": "float",
+    "min": 0.0,
+    "max": 1.0,
+    "default": 0.5
+   },
+   {
+    "name": "algorithm",
+    "label": "Algorithme",
+    "type": "select",
+    "options": [
+     "bfs",
+     "dfs"
+    ],
+    "default": "bfs"
+   },
+   {
+    "name": "walls",
+    "label": "Murs aléatoires",
+    "type": "float",
+    "min": 0.0,
+    "max": 0.3,
+    "default": 0.08
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "game_of_life_heart",
+  "doc": "game_of_life_heart (algo 18) : jeu de la vie de Conway, départ en forme de coeur.",
+  "render": "grid",
+  "file": "public/algos/game_of_life_heart.py",
+  "params": [
+   {
+    "name": "grid_size",
+    "label": "Taille de la grille",
+    "type": "int",
+    "min": 20,
+    "max": 120,
+    "default": 48
+   },
+   {
+    "name": "steps",
+    "label": "Générations",
+    "type": "int",
+    "min": 10,
+    "max": 300,
+    "default": 120
+   },
+   {
+    "name": "initial_density",
+    "label": "Densité initiale",
+    "type": "float",
+    "min": 0.05,
+    "max": 0.6,
+    "default": 0.3
+   },
+   {
+    "name": "wrap",
+    "label": "Bords qui bouclent",
+    "type": "bool",
+    "default": true
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "heart_bloom_trail",
+  "doc": "heart_bloom_trail (algo 2) : des lumières qui parcourent le coeur en laissant une traînée.",
+  "render": "points",
+  "file": "public/algos/heart_bloom_trail.py",
+  "params": [
+   {
+    "name": "heads",
+    "label": "Têtes lumineuses",
+    "type": "int",
+    "min": 1,
+    "max": 6,
+    "default": 2
+   },
+   {
+    "name": "trail",
+    "label": "Longueur de traînée",
+    "type": "int",
+    "min": 5,
+    "max": 80,
+    "default": 30
+   },
+   {
+    "name": "frames",
+    "label": "Images par tour",
+    "type": "int",
+    "min": 24,
+    "max": 120,
+    "default": 60
+   },
+   {
+    "name": "size",
+    "label": "Taille de la tête",
+    "type": "float",
+    "min": 1.0,
+    "max": 6.0,
+    "default": 3.0
+   },
+   {
+    "name": "bloom",
+    "label": "Floraison",
+    "type": "float",
+    "min": 0.0,
+    "max": 3.0,
+    "default": 1.0
+   }
+  ]
+ },
+ {
+  "id": "heart_confetti_burst",
+  "doc": "heart_confetti_burst (algo 6) : des confettis jaillissent du contour d'un coeur.",
+  "render": "points",
+  "file": "public/algos/heart_confetti_burst.py",
+  "params": [
+   {
+    "name": "count",
+    "label": "Confettis",
+    "type": "int",
+    "min": 20,
+    "max": 400,
+    "default": 150
+   },
+   {
+    "name": "power",
+    "label": "Puissance",
+    "type": "float",
+    "min": 2.0,
+    "max": 20.0,
+    "default": 9.0
+   },
+   {
+    "name": "friction",
+    "label": "Frottement",
+    "type": "float",
+    "min": 0.8,
+    "max": 0.99,
+    "default": 0.94
+   },
+   {
+    "name": "gravity",
+    "label": "Gravité",
+    "type": "float",
+    "min": 0.0,
+    "max": 0.5,
+    "default": 0.1
+   },
+   {
+    "name": "frames",
+    "label": "Images",
+    "type": "int",
+    "min": 20,
+    "max": 120,
+    "default": 48
+   },
+   {
+    "name": "size",
+    "label": "Taille",
+    "type": "float",
+    "min": 1.0,
+    "max": 5.0,
+    "default": 2.5
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "heart_constellation_map",
+  "doc": "heart_constellation_map (algo 8) : des étoiles dans un coeur, reliées par un arbre couvrant minimal.",
+  "render": "points",
+  "file": "public/algos/heart_constellation_map.py",
+  "params": [
+   {
+    "name": "count",
+    "label": "Étoiles",
+    "type": "int",
+    "min": 20,
+    "max": 400,
+    "default": 120
+   },
+   {
+    "name": "size",
+    "label": "Taille des étoiles",
+    "type": "float",
+    "min": 0.5,
+    "max": 4.0,
+    "default": 1.8
+   },
+   {
+    "name": "link_alpha",
+    "label": "Opacité des liens",
+    "type": "float",
+    "min": 0.1,
+    "max": 1.0,
+    "default": 0.5
+   },
+   {
+    "name": "extra_links",
+    "label": "Liens en plus (part)",
+    "type": "float",
+    "min": 0.0,
+    "max": 0.5,
+    "default": 0.15
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "heart_frame_sequence",
+  "doc": "heart_frame_sequence (algo 11) : une séquence d'images PNG (Pillow) d'un coeur qui bat.",
+  "render": "frames",
+  "file": "public/algos/heart_frame_sequence.py",
+  "params": [
+   {
+    "name": "frames",
+    "label": "Images",
+    "type": "int",
+    "min": 10,
+    "max": 90,
+    "default": 24
+   },
+   {
+    "name": "size",
+    "label": "Taille (px)",
+    "type": "int",
+    "min": 128,
+    "max": 512,
+    "default": 256
+   },
+   {
+    "name": "easing",
+    "label": "Easing",
+    "type": "select",
+    "options": [
+     "linear",
+     "ease-in",
+     "ease-out",
+     "smoothstep"
+    ],
+    "default": "smoothstep"
+   },
+   {
+    "name": "sparkles",
+    "label": "Étincelles",
+    "type": "int",
+    "min": 0,
+    "max": 40,
+    "default": 12
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "heart_glow_particle_field",
+  "doc": "heart_glow_particle_field (algo 7) : un champ de particules lumineuses dans un coeur.",
+  "render": "points",
+  "file": "public/algos/heart_glow_particle_field.py",
+  "params": [
+   {
+    "name": "count",
+    "label": "Particules",
+    "type": "int",
+    "min": 100,
+    "max": 2000,
+    "default": 900
+   },
+   {
+    "name": "size",
+    "label": "Taille",
+    "type": "float",
+    "min": 0.5,
+    "max": 4.0,
+    "default": 1.6
+   },
+   {
+    "name": "glow",
+    "label": "Halo (0 = aucun)",
+    "type": "float",
+    "min": 0.0,
+    "max": 1.0,
+    "default": 0.5
+   },
+   {
+    "name": "frames",
+    "label": "Images de scintillement (1 = fixe)",
+    "type": "int",
+    "min": 1,
+    "max": 12,
+    "default": 1
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "heart_grid_pulse",
+  "doc": "heart_grid_pulse (algo 5) : coeur en grille, avec une onde qui part du centre.",
+  "render": "grid",
+  "file": "public/algos/heart_grid_pulse.py",
+  "params": [
+   {
+    "name": "grid_size",
+    "label": "Taille de la grille",
+    "type": "int",
+    "min": 16,
+    "max": 120,
+    "default": 48
+   },
+   {
+    "name": "frames",
+    "label": "Images",
+    "type": "int",
+    "min": 12,
+    "max": 60,
+    "default": 30
+   },
+   {
+    "name": "wavelength",
+    "label": "Longueur d'onde (cases)",
+    "type": "float",
+    "min": 2.0,
+    "max": 30.0,
+    "default": 8.0
+   },
+   {
+    "name": "low_color",
+    "label": "Couleur de l'ombre",
+    "type": "str",
+    "min": 7,
+    "max": 7,
+    "default": "#2e1065"
+   },
+   {
+    "name": "mid_color",
+    "label": "Couleur principale",
+    "type": "str",
+    "min": 7,
+    "max": 7,
+    "default": "#a78bfa"
+   },
+   {
+    "name": "high_color",
+    "label": "Couleur de l'éclat",
+    "type": "str",
+    "min": 7,
+    "max": 7,
+    "default": "#f9a8d4"
+   },
+   {
+    "name": "peak_color",
+    "label": "Couleur du reflet",
+    "type": "str",
+    "min": 7,
+    "max": 7,
+    "default": "#ffffff"
+   }
+  ]
+ },
+ {
+  "id": "heart_pulse_points",
+  "doc": "heart_pulse_points (algo 1) : coeur en points qui pulse, boucle parfaite.",
+  "render": "points",
+  "file": "public/algos/heart_pulse_points.py",
+  "params": [
+   {
+    "name": "count",
+    "label": "Points par couche",
+    "type": "int",
+    "min": 40,
+    "max": 400,
+    "default": 120
+   },
+   {
+    "name": "layers",
+    "label": "Couches",
+    "type": "int",
+    "min": 1,
+    "max": 5,
+    "default": 3
+   },
+   {
+    "name": "size",
+    "label": "Taille des points",
+    "type": "float",
+    "min": 0.5,
+    "max": 4.0,
+    "default": 2.0
+   },
+   {
+    "name": "pulse",
+    "label": "Amplitude de pulsation",
+    "type": "float",
+    "min": 0.0,
+    "max": 0.25,
+    "default": 0.08
+   },
+   {
+    "name": "frames",
+    "label": "Images",
+    "type": "int",
+    "min": 4,
+    "max": 48,
+    "default": 24
+   },
+   {
+    "name": "fps",
+    "label": "Images par seconde",
+    "type": "int",
+    "min": 5,
+    "max": 30,
+    "default": 18
+   }
+  ]
+ },
+ {
+  "id": "heart_rose_bloom",
+  "doc": "heart_rose_bloom (algo 10) : une fleur de courbes \"rose\" avec un petit coeur au centre.",
+  "render": "points",
+  "file": "public/algos/heart_rose_bloom.py",
+  "params": [
+   {
+    "name": "k",
+    "label": "Paramètre k (pétales)",
+    "type": "int",
+    "min": 2,
+    "max": 12,
+    "default": 5
+   },
+   {
+    "name": "layers",
+    "label": "Couches",
+    "type": "int",
+    "min": 1,
+    "max": 6,
+    "default": 4
+   },
+   {
+    "name": "samples",
+    "label": "Points par couche",
+    "type": "int",
+    "min": 120,
+    "max": 720,
+    "default": 300
+   },
+   {
+    "name": "rotation",
+    "label": "Rotation entre couches (degrés)",
+    "type": "float",
+    "min": 0.0,
+    "max": 90.0,
+    "default": 15.0
+   },
+   {
+    "name": "size",
+    "label": "Taille des points",
+    "type": "float",
+    "min": 0.5,
+    "max": 3.0,
+    "default": 1.2
+   },
+   {
+    "name": "heart_center",
+    "label": "Coeur au centre",
+    "type": "bool",
+    "default": true
+   }
+  ]
+ },
+ {
+  "id": "heart_wave_ribbon",
+  "doc": "heart_wave_ribbon (algo 4) : ruban ondulé qui suit le contour du coeur.",
+  "render": "points",
+  "file": "public/algos/heart_wave_ribbon.py",
+  "params": [
+   {
+    "name": "samples",
+    "label": "Points par bord",
+    "type": "int",
+    "min": 60,
+    "max": 600,
+    "default": 160
+   },
+   {
+    "name": "amplitude",
+    "label": "Amplitude (px)",
+    "type": "float",
+    "min": 0.0,
+    "max": 30.0,
+    "default": 10.0
+   },
+   {
+    "name": "waves",
+    "label": "Nombre de vagues",
+    "type": "int",
+    "min": 2,
+    "max": 30,
+    "default": 12
+   },
+   {
+    "name": "width_ribbon",
+    "label": "Largeur du ruban (px)",
+    "type": "float",
+    "min": 2.0,
+    "max": 30.0,
+    "default": 10.0
+   },
+   {
+    "name": "size",
+    "label": "Taille des points",
+    "type": "float",
+    "min": 0.5,
+    "max": 4.0,
+    "default": 1.6
+   },
+   {
+    "name": "link_alpha",
+    "label": "Opacité des liens",
+    "type": "float",
+    "min": 0.1,
+    "max": 1.0,
+    "default": 0.6
+   },
+   {
+    "name": "frames",
+    "label": "Images",
+    "type": "int",
+    "min": 4,
+    "max": 48,
+    "default": 20
+   }
+  ]
+ },
+ {
+  "id": "huffman_love_tree",
+  "doc": "huffman_love_tree (algo 24) : codage de Huffman d'un message, avec fréquences, codes et taux de compression.",
+  "render": "text",
+  "file": "public/algos/huffman_love_tree.py",
+  "params": [
+   {
+    "name": "message",
+    "label": "Message",
+    "type": "str",
+    "min": 1,
+    "max": 60,
+    "default": "JOYEUX ANNIVERSAIRE"
+   },
+   {
+    "name": "show_steps",
+    "label": "Afficher les fusions",
+    "type": "bool",
+    "default": true
+   },
+   {
+    "name": "show_tree",
+    "label": "Afficher l'arbre",
+    "type": "bool",
+    "default": true
+   }
+  ]
+ },
+ {
+  "id": "love_text_console",
+  "doc": "love_text_console (algo 12) : message d'amour dans une console, en texte centré.",
+  "render": "text",
+  "file": "public/algos/love_text_console.py",
+  "params": [
+   {
+    "name": "message",
+    "label": "Message",
+    "type": "str",
+    "min": 1,
+    "max": 40,
+    "default": "JOYEUX ANNIVERSAIRE"
+   },
+   {
+    "name": "style",
+    "label": "Style",
+    "type": "select",
+    "options": [
+     "coeur",
+     "boite",
+     "simple"
+    ],
+    "default": "coeur"
+   },
+   {
+    "name": "width_chars",
+    "label": "Largeur (caractères)",
+    "type": "int",
+    "min": 24,
+    "max": 60,
+    "default": 40
+   },
+   {
+    "name": "color",
+    "label": "Couleur",
+    "type": "str",
+    "min": 7,
+    "max": 7,
+    "default": "#c4b5fd"
+   }
+  ]
+ },
+ {
+  "id": "lsystem_heart_tree",
+  "doc": "lsystem_heart_tree (algo 23) : arbre fractal (L-système) dont les bouts de branches sont des coeurs.",
+  "render": "points",
+  "file": "public/algos/lsystem_heart_tree.py",
+  "params": [
+   {
+    "name": "iterations",
+    "label": "Itérations",
+    "type": "int",
+    "min": 1,
+    "max": 7,
+    "default": 5
+   },
+   {
+    "name": "angle",
+    "label": "Angle (degrés)",
+    "type": "float",
+    "min": 10.0,
+    "max": 45.0,
+    "default": 22.0
+   },
+   {
+    "name": "length_ratio",
+    "label": "Rapport des longueurs",
+    "type": "float",
+    "min": 0.5,
+    "max": 0.9,
+    "default": 0.72
+   },
+   {
+    "name": "leaf_size",
+    "label": "Taille des coeurs (px)",
+    "type": "float",
+    "min": 3.0,
+    "max": 16.0,
+    "default": 8.0
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "mandelbrot_julia_violet",
+  "doc": "mandelbrot_julia_violet (algo 22) : fractale de Mandelbrot ou de Julia en violet / rose.",
+  "render": "image",
+  "file": "public/algos/mandelbrot_julia_violet.py",
+  "params": [
+   {
+    "name": "kind",
+    "label": "Fractale",
+    "type": "select",
+    "options": [
+     "mandelbrot",
+     "julia"
+    ],
+    "default": "mandelbrot"
+   },
+   {
+    "name": "size",
+    "label": "Taille (px)",
+    "type": "int",
+    "min": 128,
+    "max": 800,
+    "default": 480
+   },
+   {
+    "name": "max_iter",
+    "label": "Itérations maximum",
+    "type": "int",
+    "min": 20,
+    "max": 300,
+    "default": 80
+   },
+   {
+    "name": "zoom",
+    "label": "Zoom",
+    "type": "float",
+    "min": 0.5,
+    "max": 200.0,
+    "default": 1.0
+   },
+   {
+    "name": "center_x",
+    "label": "Centre x",
+    "type": "float",
+    "min": -2.0,
+    "max": 2.0,
+    "default": 0.0
+   },
+   {
+    "name": "center_y",
+    "label": "Centre y",
+    "type": "float",
+    "min": -2.0,
+    "max": 2.0,
+    "default": 0.0
+   },
+   {
+    "name": "c_real",
+    "label": "c (réel) pour Julia",
+    "type": "float",
+    "min": -2.0,
+    "max": 2.0,
+    "default": -0.8
+   },
+   {
+    "name": "c_imag",
+    "label": "c (imaginaire) pour Julia",
+    "type": "float",
+    "min": -2.0,
+    "max": 2.0,
+    "default": 0.156
+   },
+   {
+    "name": "palette",
+    "label": "Palette",
+    "type": "select",
+    "options": [
+     "violet",
+     "rose",
+     "nuit"
+    ],
+    "default": "violet"
+   }
+  ]
+ },
+ {
+  "id": "matrix_rain_violet",
+  "doc": "matrix_rain_violet (algo 14) : pluie de pixels violets qui tombent en colonnes.",
+  "render": "grid",
+  "file": "public/algos/matrix_rain_violet.py",
+  "params": [
+   {
+    "name": "cols",
+    "label": "Colonnes",
+    "type": "int",
+    "min": 16,
+    "max": 80,
+    "default": 40
+   },
+   {
+    "name": "rows",
+    "label": "Lignes",
+    "type": "int",
+    "min": 16,
+    "max": 60,
+    "default": 30
+   },
+   {
+    "name": "density",
+    "label": "Densité",
+    "type": "float",
+    "min": 0.05,
+    "max": 0.6,
+    "default": 0.25
+   },
+   {
+    "name": "tail",
+    "label": "Longueur de traînée",
+    "type": "int",
+    "min": 3,
+    "max": 20,
+    "default": 8
+   },
+   {
+    "name": "steps",
+    "label": "Images",
+    "type": "int",
+    "min": 20,
+    "max": 200,
+    "default": 80
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "maze_astar",
+  "doc": "maze_astar (algo 20) : génère un labyrinthe parfait puis le résout (BFS, Dijkstra ou A*).",
+  "render": "frames",
+  "file": "public/algos/maze_astar.py",
+  "params": [
+   {
+    "name": "size",
+    "label": "Taille (cellules)",
+    "type": "int",
+    "min": 8,
+    "max": 60,
+    "default": 25
+   },
+   {
+    "name": "algorithm",
+    "label": "Algorithme",
+    "type": "select",
+    "options": [
+     "bfs",
+     "dijkstra",
+     "astar"
+    ],
+    "default": "astar"
+   },
+   {
+    "name": "heuristic",
+    "label": "Heuristique (A*)",
+    "type": "select",
+    "options": [
+     "manhattan",
+     "euclidienne"
+    ],
+    "default": "manhattan"
+   },
+   {
+    "name": "max_frames",
+    "label": "Images maximum",
+    "type": "int",
+    "min": 30,
+    "max": 600,
+    "default": 300
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "morphing_heart_contour",
+  "doc": "morphing_heart_contour (algo 9) : un contour qui passe du cercle au coeur et revient.",
+  "render": "points",
+  "file": "public/algos/morphing_heart_contour.py",
+  "params": [
+   {
+    "name": "samples",
+    "label": "Points du contour",
+    "type": "int",
+    "min": 80,
+    "max": 600,
+    "default": 160
+   },
+   {
+    "name": "frames",
+    "label": "Images",
+    "type": "int",
+    "min": 12,
+    "max": 60,
+    "default": 30
+   },
+   {
+    "name": "harmonics",
+    "label": "Harmoniques du bruit",
+    "type": "int",
+    "min": 1,
+    "max": 8,
+    "default": 4
+   },
+   {
+    "name": "noise",
+    "label": "Intensité du bruit",
+    "type": "float",
+    "min": 0.0,
+    "max": 1.0,
+    "default": 0.35
+   },
+   {
+    "name": "size",
+    "label": "Taille des points",
+    "type": "float",
+    "min": 0.5,
+    "max": 4.0,
+    "default": 1.6
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "nqueens_backtracking",
+  "doc": "nqueens_backtracking (algo 21) : n reines sur un échiquier, par backtracking.",
+  "render": "frames",
+  "file": "public/algos/nqueens_backtracking.py",
+  "params": [
+   {
+    "name": "n",
+    "label": "Taille de l'échiquier",
+    "type": "int",
+    "min": 4,
+    "max": 12,
+    "default": 8
+   },
+   {
+    "name": "mode",
+    "label": "Mode",
+    "type": "select",
+    "options": [
+     "première solution",
+     "toutes"
+    ],
+    "default": "première solution"
+   },
+   {
+    "name": "max_frames",
+    "label": "Images maximum",
+    "type": "int",
+    "min": 30,
+    "max": 600,
+    "default": 300
+   }
+  ]
+ },
+ {
+  "id": "orbit_heart_cluster",
+  "doc": "orbit_heart_cluster (algo 3) : des petits coeurs qui tournent sur des anneaux.",
+  "render": "points",
+  "file": "public/algos/orbit_heart_cluster.py",
+  "params": [
+   {
+    "name": "rings",
+    "label": "Anneaux",
+    "type": "int",
+    "min": 1,
+    "max": 4,
+    "default": 2
+   },
+   {
+    "name": "hearts",
+    "label": "Coeurs par anneau",
+    "type": "int",
+    "min": 3,
+    "max": 16,
+    "default": 6
+   },
+   {
+    "name": "points_per_heart",
+    "label": "Points par coeur",
+    "type": "int",
+    "min": 12,
+    "max": 60,
+    "default": 16
+   },
+   {
+    "name": "heart_size",
+    "label": "Taille d'un coeur (px)",
+    "type": "float",
+    "min": 6.0,
+    "max": 40.0,
+    "default": 18.0
+   },
+   {
+    "name": "speed",
+    "label": "Tours par boucle",
+    "type": "int",
+    "min": 1,
+    "max": 3,
+    "default": 1
+   },
+   {
+    "name": "frames",
+    "label": "Images",
+    "type": "int",
+    "min": 12,
+    "max": 96,
+    "default": 36
+   },
+   {
+    "name": "size",
+    "label": "Taille des points",
+    "type": "float",
+    "min": 0.5,
+    "max": 3.0,
+    "default": 1.4
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "sorting_visualizer",
+  "doc": "sorting_visualizer (algo 17) : visualise un tri, des barres qui se réorganisent.",
+  "render": "frames",
+  "file": "public/algos/sorting_visualizer.py",
+  "params": [
+   {
+    "name": "algorithm",
+    "label": "Algorithme",
+    "type": "select",
+    "options": [
+     "bubble",
+     "insertion",
+     "selection",
+     "quick",
+     "merge"
+    ],
+    "default": "quick"
+   },
+   {
+    "name": "count",
+    "label": "Nombre de barres",
+    "type": "int",
+    "min": 8,
+    "max": 120,
+    "default": 40
+   },
+   {
+    "name": "max_frames",
+    "label": "Images maximum",
+    "type": "int",
+    "min": 30,
+    "max": 600,
+    "default": 240
+   },
+   {
+    "name": "seed",
+    "label": "Graine (seed)",
+    "type": "int",
+    "min": 0,
+    "max": 999999,
+    "default": 42
+   }
+  ]
+ },
+ {
+  "id": "spirograph_orbits",
+  "doc": "spirograph_orbits (algo 15) : hypotrochoïde (spirographe) en dégradé violet.",
+  "render": "points",
+  "file": "public/algos/spirograph_orbits.py",
+  "params": [
+   {
+    "name": "R",
+    "label": "Grand cercle R",
+    "type": "int",
+    "min": 40,
+    "max": 200,
+    "default": 120
+   },
+   {
+    "name": "r",
+    "label": "Petit cercle r",
+    "type": "int",
+    "min": 5,
+    "max": 120,
+    "default": 47
+   },
+   {
+    "name": "d",
+    "label": "Distance du stylo d",
+    "type": "float",
+    "min": 5.0,
+    "max": 150.0,
+    "default": 70.0
+   },
+   {
+    "name": "samples",
+    "label": "Échantillons",
+    "type": "int",
+    "min": 300,
+    "max": 4000,
+    "default": 1500
+   },
+   {
+    "name": "hue_shift",
+    "label": "Décalage de teinte",
+    "type": "float",
+    "min": 0.0,
+    "max": 1.0,
+    "default": 0.2
+   }
+  ]
+ }
+]

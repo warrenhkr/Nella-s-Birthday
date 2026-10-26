@@ -1,0 +1,517 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================================
+// Users & Auth
+// ============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  pseudo    String   @unique
+  password  String
+  role      Role     @default(MEMBER)
+  isActive  Boolean  @default(true)
+  pole      String?
+  // Multi-pôles : un membre peut appartenir à plusieurs pôles (l'ancien champ
+  // `pole` reste le pôle principal, pour la compatibilité ascendante).
+  poles     String[] @default([])
+  // Périmètres d'administration : liste vide = accès admin complet (compatibilité).
+  // Ex. ['gaming'] = admin limité à la partie gaming.
+  adminScopes String[] @default([])
+  nom       String?
+  prenom    String?
+  telephone String?
+  universite String?
+  faculte   String?
+  filiere   String?
+  situation String?
+  pays      String?
+  profession String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile   UserProfile?
+  posts     Post[]
+  comments  Comment[]
+  likes     Like[]
+  bookings  Booking[]
+  organizedEvents Event[] @relation("OrganizedEvents")
+  cartItems CartItem[]
+  sessions  Session[]
+  orders    Order[]
+  reviews   ProductReview[]
+  otakuCard OtakuCard?
+  notifications Notification[]
+  issueReports IssueReport[] @relation("IssueReportAuthor")
+  importBatches ImportBatch[]
+  // Lot 3 gaming : équipes créées par les membres.
+  captainedTeams TournamentTeam[] @relation("TeamCaptain")
+  teamMemberships TournamentTeamMember[]
+
+  @@map("users")
+}
+
+enum OtakuCardStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model OtakuCard {
+  id          String          @id @default(cuid())
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String          @unique
+  displayName String
+  favoriteAnime String?
+  favoriteManga String?
+  favoriteAnimes String[] @default([])
+  favoriteMangas String[] @default([])
+  favoriteGame String?
+  bio         String?
+  imageUrl    String?
+  status      OtakuCardStatus @default(PENDING)
+  reviewedAt  DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([status])
+  @@map("otaku_cards")
+}
+
+model UserProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  avatar       String?
+  bio          String?
+  level        String   @default("Crew")
+  joinedAt     DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("user_profiles")
+}
+
+model Session {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+enum Role {
+  SUPER_ADMIN
+  INTERMEDIATE_ADMIN
+  ADMIN
+  SHOP_MANAGER
+  MEMBER
+}
+
+enum IssueReportCategory {
+  BUG
+  PROBLEM
+  SUGGESTION
+  OTHER
+}
+
+enum IssueReportPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IssueReportStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model IssueReport {
+  id            String             @id @default(cuid())
+  author        User?              @relation("IssueReportAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  authorId      String?
+  title         String
+  description   String
+  category      IssueReportCategory
+  priority      IssueReportPriority @default(MEDIUM)
+  status        IssueReportStatus   @default(OPEN)
+  adminResponse String?
+  respondedAt   DateTime?
+  resolvedAt    DateTime?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([authorId])
+  @@index([status])
+  @@index([priority])
+  @@index([category])
+  @@index([createdAt])
+  @@map("issue_reports")
+}
+
+// ============================================================================
+// Community & Posts
+// ============================================================================
+
+model Post {
+  id        String   @id @default(cuid())
+  content   String
+  pole      String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments Comment[]
+  likes    Like[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+// ============================================================================
+// Events
+// ============================================================================
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime
+  endDate     DateTime?
+  place       String
+  pole        String
+  imageUrl    String?
+  status      String   @default("Ouvert")
+  capacity    Int?
+  price       Float    @default(0)
+  isFree      Boolean  @default(true)
+  paymentInstructions String?
+  organizerId String?
+  organizer   User?    @relation("OrganizedEvents", fields: [organizerId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  attendees Booking[]
+  galleryMedia GalleryImage[]
+
+  @@map("events")
+}
+
+model ImportBatch {
+  id          String   @id @default(cuid())
+  kind        String
+  filename    String
+  format      String
+  status      String   @default("COMPLETED")
+  rows        Json
+  report      Json?
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  expiresAt   DateTime
+  deletedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([kind, status, expiresAt])
+  @@index([createdById, createdAt])
+  @@map("import_batches")
+}
+
+model Booking {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId   String
+  status    String   @default("confirmed")
+  participantName String?
+  contactPhone String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, eventId])
+  @@map("bookings")
+}
+
+model Tournament {
+  id        String     @id @default(cuid())
+  name      String
+  game      String
+  status    String     @default("draft")
+  // 'DRAFT' (invisible au public) | 'UNLISTED' (accessible par lien) | 'PUBLIC'
+  visibility String    @default("DRAFT")
+  description String?
+  format    String?
+  startDate DateTime?
+  endDate   DateTime?
+  // Inscriptions ouvertes : les équipes peuvent s'inscrire elles-mêmes.
+  registrationOpen Boolean @default(false)
+  maxTeams  Int?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  teams     TournamentTeam[]
+  matches   TournamentMatch[]
+  registrations TournamentRegistration[]
+
+  @@index([visibility, status])
+  @@map("tournaments")
+}
+
+// Équipe de tournoi. Depuis le Lot 3, une équipe peut exister SANS tournoi
+// (`tournamentId` nullable) : elle est créée par un membre, puis inscrite à un
+// ou plusieurs tournois via TournamentRegistration. Les équipes créées par le
+// cockpit admin continuent de renseigner `tournamentId` dès la création.
+model TournamentTeam {
+  id           String     @id @default(cuid())
+  name         String
+  seed         Int?
+  logoUrl      String?
+  description  String?
+  captainId    String?
+  captain      User?      @relation("TeamCaptain", fields: [captainId], references: [id], onDelete: SetNull)
+  tournamentId String?
+  tournament   Tournament? @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  homeMatches  TournamentMatch[] @relation("homeTeam")
+  awayMatches  TournamentMatch[] @relation("awayTeam")
+  members      TournamentTeamMember[]
+  registrations TournamentRegistration[]
+
+  @@unique([tournamentId, name])
+  @@index([captainId])
+  @@map("tournament_teams")
+}
+
+// Roster d'une équipe : qui la compose, et qui la commande.
+model TournamentTeamMember {
+  id       String         @id @default(cuid())
+  teamId   String
+  team     TournamentTeam @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 'CAPTAIN' | 'PLAYER'
+  role     String         @default("PLAYER")
+  joinedAt DateTime       @default(now())
+
+  @@unique([teamId, userId])
+  @@index([userId])
+  @@map("tournament_team_members")
+}
+
+// Demande d'inscription d'une équipe à un tournoi (validée par l'organisation).
+model TournamentRegistration {
+  id           String         @id @default(cuid())
+  tournamentId String
+  tournament   Tournament     @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  teamId       String
+  team         TournamentTeam @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  // 'PENDING' | 'APPROVED' | 'REJECTED'
+  status       String         @default("PENDING")
+  message      String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@unique([tournamentId, teamId])
+  @@index([tournamentId, status])
+  @@index([teamId])
+  @@map("tournament_registrations")
+}
+
+model TournamentMatch {
+  id           String          @id @default(cuid())
+  round        Int
+  position     Int
+  status       String          @default("scheduled")
+  scoreHome    Int?
+  scoreAway    Int?
+  tournamentId String
+  homeTeamId   String?
+  awayTeamId   String?
+  tournament   Tournament      @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  homeTeam     TournamentTeam? @relation("homeTeam", fields: [homeTeamId], references: [id], onDelete: SetNull)
+  awayTeam     TournamentTeam? @relation("awayTeam", fields: [awayTeamId], references: [id], onDelete: SetNull)
+
+  @@unique([tournamentId, round, position])
+  @@map("tournament_matches")
+}
+
+// ============================================================================
+// Boutique
+// ============================================================================
+
+model Product {
+  id        String   @id @default(cuid())
+  name      String
+  price     Int
+  whatsappNumber String?
+  tag       String
+  category  String
+  description String?
+  stock     Int      @default(0)
+  imageUrl  String?
+  imageUrls Json?
+  variations Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cartItems CartItem[]
+  orderItems OrderItem[]
+  reviews   ProductReview[]
+
+  @@map("products")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  customerName  String
+  phone         String
+  deliveryNote  String?
+  total         Int
+  status        OrderStatus @default(PENDING)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  items         OrderItem[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  productId String
+  name      String
+  unitPrice Int
+  quantity  Int
+
+  @@map("order_items")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId])
+  @@map("cart_items")
+}
+
+model ProductReview {
+  id        String   @id @default(cuid())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, userId])
+  @@index([productId, createdAt])
+  @@map("product_reviews")
+}
+
+// ============================================================================
+// Gallery
+// ============================================================================
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  title     String?
+  url       String
+  sourceUrl String?
+  mediaType String   @default("IMAGE")
+  youtubeId String?
+  description String?
+  category  String?
+  eventDate DateTime?
+  eventTag  String?
+  eventId   String?
+  event     Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  publicId  String?
+  isPublished Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([eventId])
+  @@index([mediaType, isPublished])
+  @@map("gallery_images")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  title     String
+  body      String?
+  type      String?
+  data      Json?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("notifications")
+}
